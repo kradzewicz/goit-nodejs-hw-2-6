@@ -1,15 +1,25 @@
-const express = require('express')
+const express = require('express');
 
-const Contact = require('../../models/ContactSchema.js')
+const {
+  getAllContacts,
+  getContact,
+  createContact,
+  putContact,
+  deleteContact,
+  updateStatusContact
+} = require('../../controllers/contacts/index');
+
+const { validateContact, validateStatus } = require('../../validators/contactValidation');
+
 
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
-  const contactList = await Contact.find();
-  res.json({
-    message: 'listed contacts',
-    contactList
-   })
-})
+router.get('/', getAllContacts);
+router.get('/:contactId', getContact);
+router.post('/', validateContact, createContact);
+router.put('/:contactId', validateContact, putContact);
+router.delete('/:contactId', deleteContact)
+router.patch('/:contactId/favorite', validateStatus, updateStatusContact)
+
 
 module.exports = router
