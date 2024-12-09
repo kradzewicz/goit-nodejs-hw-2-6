@@ -4,7 +4,6 @@ const { schemaContact, schemaStatus } = require("./joi")
 const validateContact = (req, res, next) => {
     const { error } = schemaContact.validate(req.body)
     
-    // catch error if validation failed
     if (error) {
         return res.status(400).json({
             message: 'Validation error',
@@ -12,9 +11,7 @@ const validateContact = (req, res, next) => {
         })
     }
 
-    // go to next function in route if validacion succeed
     next()
-
 }
 
 const validateStatus = (req, res, next) => {
@@ -28,8 +25,6 @@ const validateStatus = (req, res, next) => {
             errors: error.details.map((detail => detail.message))
         })
     }
-
-    // go to next function in route if validacion succeed
     next()
 
 }

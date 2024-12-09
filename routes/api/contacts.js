@@ -21,5 +21,4 @@ router.put('/:contactId', validateContact, putContact);
 router.delete('/:contactId', deleteContact)
 router.patch('/:contactId/favorite', validateStatus, updateStatusContact)
 
-
 module.exports = router

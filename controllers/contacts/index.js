@@ -143,23 +143,17 @@ const updateStatusContact = async (req, res, next) => {
             })
 
     } catch (error) {
-
-        // validation error - show status 400, not 500
         console.log(error)
         if (error.name === 'ValidationError') {
             const errors = Object.keys(error.errors).map(key => error.errors[key].message);
             res.status(400).json({
                 message: 'Validation error',
                 errors
-             })
-            
+             }) 
         } else {
-            next(error)
-            
-        }
-            
+            next(error)           
+        }            
     }
-
 }
 
 module.exports = {
