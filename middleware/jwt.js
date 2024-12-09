@@ -5,7 +5,7 @@ function authMiddleware(req, res, next) {
         'jwt',
         { session: false },
         (err, user) => {
-            if (!user || err) {
+            if (!user || err || user.token === null) {
                 return res.status(401).json({message: 'Unauthorized'})
             }
             req.user = user
