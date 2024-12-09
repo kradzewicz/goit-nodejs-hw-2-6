@@ -1,8 +1,21 @@
 const User = require('../../models/User')
 
 
-const fetchUser = (email) => {
-    return User.findOne({email})
+const fetchUser = (key) => {
+    return User.findOne(key)
 }
 
-module.exports = {fetchUser}
+const setToken = (_id, token) => {
+    return User.findByIdAndUpdate(
+      { _id: _id },
+      { $set: token },
+      {
+        new: true,
+        runValidators: true,
+        strict: 'throw',
+        upsert: false
+      }
+    )
+  }
+
+module.exports = {fetchUser, setToken}

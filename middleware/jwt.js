@@ -6,9 +6,9 @@ function authMiddleware(req, res, next) {
         { session: false },
         (err, user) => {
             if (!user || err) {
-                return res.status(401).json({message: 'Unauthorize'})
+                return res.status(401).json({message: 'Unauthorized'})
             }
-            res.locals.user = user
+            req.user = user
             next()
         }
     )(req,res,next)

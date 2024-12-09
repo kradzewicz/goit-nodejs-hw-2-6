@@ -22,7 +22,22 @@ const schemaStatus = Joi.object({
 
 })
 
+const schemaUser = Joi.object({
+    password: Joi.string().min(6).required().messages({
+        "string.empty": "Password field is required",
+        "string.min": "Password must be at least 6 characters long",
+  }),
+    email: Joi.string().email({minDomainSegments:2}).required().messages({
+        "string.empty": "Email field is required",
+        "string.email": "Please enter a valid email",
+    }),
+    username: Joi.string().required().messages({
+        "string.empty": "Username field is required"
+    })
+})
+
 module.exports = {
     schemaContact,
-    schemaStatus
+    schemaStatus,
+    schemaUser
 }
