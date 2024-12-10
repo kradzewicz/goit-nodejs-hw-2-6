@@ -37,7 +37,7 @@ const uploadMiddleware = multer({
 })
 
 const validateAndTransformImage = async (req, res, next) => {
-    console.log("req in validate", req)
+
     if (!req.file) {
         return res.status(400).json({message: "File isn't a photo"})
     }
@@ -45,6 +45,7 @@ const validateAndTransformImage = async (req, res, next) => {
     const extension = path.extname(tempFilePath);
     const fileName = `${nanoid()}${extension}`;
     const filePath = path.join(storageImgDir, fileName);
+
 
     try {
         await fs.rename(tempFilePath, filePath);
@@ -54,12 +55,14 @@ const validateAndTransformImage = async (req, res, next) => {
     }
     
     const isValidAndTransform = await isImageAndTransform(filePath);
-        
+    
     if (!isValidAndTransform) {
         await fs.unlink(filePath)
         return res.status(400).json({ message: "Image's validation failed" })
     }
-    res.redirect(`/${fileName}`)
+
+    next()
+    // res.redirect(`/upload/${fileName}`)
 }
     module.exports = {
         uploadMiddleware,

@@ -1,6 +1,8 @@
 const { fetchUser, setToken } = require("./services")
 const User = require('../../models/User')
 const jwt = require("jsonwebtoken")
+const gravatar = require('gravatar')
+const path = require('path')
 
 
 const signupUser = async (req, res, next) => {
@@ -11,6 +13,7 @@ const signupUser = async (req, res, next) => {
     }
     try {
         const newUser = new User({ username, email })
+        newUser.avatarURL = gravatar.url(email, {s:250})
         await newUser.setPassword(password)
         await newUser.save()
         return res.status(201).json({message: 'New user created'})
@@ -43,6 +46,7 @@ const loginUser = async (req, res, next) => {
             token: userWithToken.token,
             user:{
                 email: userWithToken.email,
+                avatar: userWithToken.avatarURL,
                 subscribtion: userWithToken.subscription
         }})
     } else {
@@ -74,15 +78,41 @@ const currentUser = async (req, res) => {
     return res.status(200).json({
         current_user: {
             email: user.email,
+            avatar: user.avatarURL,
             subscription: user.subscription,
             token: user.token,
         }
     })
 }
 
+const updateUserAvatar = async (req, res) => {
+    const { _id } = req.user
+    const avatar = req.file.filename
+    try {
+        if (!avatar) {
+            return res.status(400).json({message:"Avatar is missing"})
+        }
+        const avatarURL = path.join('/images', avatar)
+        
+        const user = await fetchUser({ _id })
+        
+        if (!user) {
+            return res.status(401).json({ message: "Not authorizeddd"})
+        }
+        
+        await setToken(user._id, { avatarURL: avatarURL })
+        
+        return res.status(200).json({avatarURL: avatarURL})
+    } catch (error) {
+        console.log(error)
+        next(error)
+    }
+}
+
 module.exports = {
     signupUser,
     loginUser,
     logoutUser,
-    currentUser
+    currentUser,
+    updateUserAvatar
 }

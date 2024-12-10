@@ -13,8 +13,7 @@ setJWTStrategy()
 const app = express()
 
 app.set('view engine', 'ejs')
-app.use(express.static(path.resolve(__dirname, './public')))
-
+app.use('/public', express.static(path.resolve(__dirname, './public')));
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
 app.use(logger(formatsLogger))

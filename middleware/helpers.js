@@ -1,5 +1,5 @@
 const fs = require("fs").promises;
-const {Jimp} = require("jimp");
+const Jimp = require("jimp");
 
 const isAccessible = (path) =>
     fs.access(path)
@@ -24,8 +24,8 @@ const MAX_AVATAR_HEIGHT = 512;
 const isImageAndTransform = async (path) =>
     new Promise((resolve) => {
         Jimp.read(path, async (err, image) => {
+            
             if (err) resolve(false);
-
             try {
                 const w = image.getWidth();
                 const h = image.getHeight();
