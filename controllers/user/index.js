@@ -149,7 +149,7 @@ const verifyUserbyEmail = async (req, res, next) => {
         }
         const html = `<a href="http://localhost:3000/api/user/verify/${user.verificationToken}"><h2>Click here to confirm your registration</h2></a><h4>and try not to loose this email again</h4>`
         await verificationMail(html, email)
-
+        res.status(200).json({message: "Verification email sent"})
 
     } catch (error) {
         next(error)
